@@ -1,0 +1,55 @@
+name: Visitor Counter
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */12 * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  update-counter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Install jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+
+      - name: Update counter
+        id: counter
+        run: |
+          if [ -f "counter.json" ]; then
+            CURRENT=$(jq -r '.message' counter.json)
+            echo "Current count: $CURRENT"
+          else
+            CURRENT=0
+            echo "No counter.json found, starting from 0"
+          fi
+          
+          NEW_COUNT=$((CURRENT + 1))
+          echo "New count: $NEW_COUNT"
+
+          jq --arg count "$NEW_COUNT" '.message = $count' counter.json > temp.json && mv temp.json counter.json
+          
+          echo "new_count=$NEW_COUNT" >> $GITHUB_OUTPUT
+
+      - name: Commit and push changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: 'counter.json'
+          message: 'Increment visitor counter to ${{ steps.counter.outputs.new_count }}'
+          push: true
+          default_author: github_actions
+
+      - name: Verify update
+        run: |
+          echo "Final counter value:"
+          cat counter.json
