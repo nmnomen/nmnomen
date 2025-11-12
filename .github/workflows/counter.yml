@@ -17,42 +17,42 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0 
+          fetch-depth: 0
 
       - name: Install jq
         run: |
           sudo apt-get update
           sudo apt-get install -y jq
-        shell: bash
 
       - name: Update counter
         id: counter
         run: |
-          if [ -f "counter.json" ]; then
-            CURRENT=$(jq -r '.message // "0"' counter.json 2>/dev/null || echo "0")
-            echo "Found counter.json with value: $CURRENT"
-          else
-            CURRENT=0
-            echo "No counter.json found, starting from 0"
+          # Создаем counter.json если его нет
+          if [ ! -f "counter.json" ]; then
+            echo "Creating new counter.json file"
+            cat > counter.json << EOF
+{
+  "schemaVersion": 1,
+  "label": "👁️ Visits",
+  "message": "0",
+  "color": "blue",
+  "style": "flat-square",
+  "logo": "github"
+}
+EOF
           fi
-          
+
+          CURRENT=$(jq -r '.message' counter.json)
+          echo "Current count: $CURRENT"
+
           NEW_COUNT=$((CURRENT + 1))
-          echo "New count will be: $NEW_COUNT"
+          echo "New count: $NEW_COUNT"
 
-          cat > counter.json << EOF
-          {
-            "schemaVersion": 1,
-            "label": "👁️ Visits",
-            "message": "$NEW_COUNT",
-            "color": "blue",
-            "style": "flat-square",
-            "logo": "github"
-          }
-          EOF
-
-          echo "new_count=$NEW_COUNT" >> \$GITHUB_OUTPUT
-          echo "Counter updated from $CURRENT to $NEW_COUNT"
-        shell: bash
+          jq --arg new_count "$NEW_COUNT" '.message = $new_count' counter.json > temp.json && mv temp.json counter.json
+          
+          echo "new_count=$NEW_COUNT" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit and push changes
         uses: EndBug/add-and-commit@v9
@@ -60,18 +60,20 @@ jobs:
           add: 'counter.json'
           message: 'Increment visitor counter to ${{ steps.counter.outputs.new_count }}'
           push: true
-          default_author: github_actions 
-          pathspec: 'counter.json' 
+          default_author: github_actions
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Verify update
         run: |
-          if [ -f "counter.json" ]; then
-            FINAL_COUNT=$(jq -r '.message' counter.json)
-            echo "Final counter value: $FINAL_COUNT"
+          echo "Verifying counter.json update..."
+          cat counter.json
+          FINAL_COUNT=$(jq -r '.message' counter.json)
+          echo "Final counter value: $FINAL_COUNT"
+          
+          if [ "$FINAL_COUNT" = "${{ steps.counter.outputs.new_count }}" ]; then
+            echo "✅ Counter updated successfully!"
           else
-            echo "ERROR: counter.json was not created!"
+            echo "❌ Counter update failed!"
             exit 1
           fi
-        shell: bash
