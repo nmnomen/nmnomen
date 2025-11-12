@@ -18,29 +18,24 @@ jobs:
       - name: Update counter
         id: counter
         run: |
+          # Initialize counter
           if [ -f "visitor-count.txt" ]; then
             COUNT=$(cat visitor-count.txt)
           else
             COUNT=0
           fi
           
+          # Increment counter
           NEW_COUNT=$((COUNT + 1))
           echo $NEW_COUNT > visitor-count.txt
           
-          cat > counter.json << EOF
-{
-  "schemaVersion": 1,
-  "label": "👁️ Visits",
-  "message": "$NEW_COUNT",
-  "color": "blue",
-  "style": "flat-square"
-}
-EOF
+          # Create JSON file
+          echo '{"schemaVersion":1,"label":"👁️ Visits","message":"'$NEW_COUNT'","color":"blue","style":"flat-square"}' > counter.json
           
           echo "count=$NEW_COUNT" >> $GITHUB_OUTPUT
-          echo "Updated counter to $NEW_COUNT"
+          echo "Counter updated to: $NEW_COUNT"
 
-      - name: Commit and push
+      - name: Commit changes
         uses: EndBug/add-and-commit@v9
         with:
           message: "Update visitor counter to ${{ steps.counter.outputs.count }}"
