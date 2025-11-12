@@ -1,7 +1,8 @@
 {
   "schemaVersion": 1,
   "label": "👁️ Visits",
-  "message": "123",
+  "message": "124",
   "color": "blue",
-  "style": "flat-square"
+  "style": "flat-square",
+  "logo": "github"
 }
