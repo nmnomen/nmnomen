@@ -11,3 +11,5 @@ My site: [https://milovision.art/](https://milovision.art/)<br><br>
 [![Facebook](https://github.com/nmnomen/nikolaymilovidov/blob/main/img/facebook_contact.png)](https://www.facebook.com/milovidov.n)&ensp;
 [![YouTube](https://github.com/nmnomen/nikolaymilovidov/blob/main/img/youtube_contact.png)](https://www.youtube.com/channel/UCwmJOLFg7Iarb7tPza4wdvg)&ensp;
 [![IMDb](https://github.com/nmnomen/nikolaymilovidov/blob/main/img/imdb_contact.png)](https://www.imdb.com/name/nm12834185/)
+
+![Visits](https://img.shields.io/endpoint?url=https://nmnomen/counter&style=flat-square&logo=github)
