@@ -1,0 +1,47 @@
+name: Visitor Counter
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  update-counter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update counter
+        id: counter
+        run: |
+          if [ -f "visitor-count.txt" ]; then
+            COUNT=$(cat visitor-count.txt)
+          else
+            COUNT=0
+          fi
+          
+          NEW_COUNT=$((COUNT + 1))
+          echo $NEW_COUNT > visitor-count.txt
+          
+          cat > counter.json << EOF
+{
+  "schemaVersion": 1,
+  "label": "👁️ Visits",
+  "message": "$NEW_COUNT",
+  "color": "blue",
+  "style": "flat-square"
+}
+EOF
+          
+          echo "count=$NEW_COUNT" >> $GITHUB_OUTPUT
+          echo "Updated counter to $NEW_COUNT"
+
+      - name: Commit and push
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: "Update visitor counter to ${{ steps.counter.outputs.count }}"
+          add: "visitor-count.txt counter.json"
