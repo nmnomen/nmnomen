@@ -2,7 +2,5 @@
   "schemaVersion": 1,
   "label": "👁️ Посещений",
   "message": "0",
-  "color": "blue",
-  "style": "flat-square",
-  "logo": "github"
+  "color": "blue"
 }
