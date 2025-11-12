@@ -7,9 +7,9 @@ In my free time I write applications for computers and smartphones that make it 
 My site: [https://milovision.art/](https://milovision.art/)<br><br>
 
 
-[![Linkedin](https://github.com/nmnomen/nikolaymilovidov/blob/main/img/linkedin_contact.png)](https://www.linkedin.com/in/nikolaymilovidov)&ensp;
-[![Facebook](https://github.com/nmnomen/nikolaymilovidov/blob/main/img/facebook_contact.png)](https://www.facebook.com/milovidov.n)&ensp;
-[![YouTube](https://github.com/nmnomen/nikolaymilovidov/blob/main/img/youtube_contact.png)](https://www.youtube.com/channel/UCwmJOLFg7Iarb7tPza4wdvg)&ensp;
-[![IMDb](https://github.com/nmnomen/nikolaymilovidov/blob/main/img/imdb_contact.png)](https://www.imdb.com/name/nm12834185/)
+[![Linkedin](img/linkedin_contact.png)](https://www.linkedin.com/in/nikolaymilovidov)&ensp;
+[![Facebook](img/facebook_contact.png)](https://www.facebook.com/milovidov.n)&ensp;
+[![YouTube](img/youtube_contact.png)](https://www.youtube.com/channel/UCwmJOLFg7Iarb7tPza4wdvg)&ensp;
+[![IMDb](img/imdb_contact.png)](https://www.imdb.com/name/nm12834185/)
 
-![Visits](https://img.shields.io/endpoint?url=https://nmnomen/counter&style=flat-square&logo=github)
+![Visits](https://img.shields.io/endpoint?url=https://nmnomen/counter)
