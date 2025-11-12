@@ -1,77 +1,35 @@
 name: Visitor Counter
-
 on:
+  page_build:
   workflow_dispatch:
-  schedule:
-    - cron: '0 */12 * * *'
-
-permissions:
-  contents: write
-  pull-requests: write
 
 jobs:
   update-counter:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0 
-
-      - name: Install jq
+      - uses: actions/checkout@v4
+      
+      - name: Read current count
+        id: count
         run: |
-          sudo apt-get update
-          sudo apt-get install -y jq
-        shell: bash
-
-      - name: Update counter
-        id: counter
-        run: |
-          if [ -f "counter.json" ]; then
-            CURRENT=$(jq -r '.message // "0"' counter.json 2>/dev/null || echo "0")
-            echo "Found counter.json with value: $CURRENT"
+          if [ -f "counter-data.json" ]; then
+            COUNT=$(cat counter-data.json)
           else
-            CURRENT=0
-            echo "No counter.json found, starting from 0"
+            COUNT=0
           fi
-
-          NEW_COUNT=$((CURRENT + 1))
-          echo "New count will be: $NEW_COUNT"
+          echo "current_count=$COUNT" >> $GITHUB_OUTPUT
+      
+      - name: Increment counter
+        run: |
+          NEW_COUNT=$((steps.count.outputs.current_count + 1))
+          echo $NEW_COUNT > counter-data.json
           
-          cat > counter.json << EOF
-          {
-            "schemaVersion": 1,
-            "label": "👁️ Visits",
-            "message": "$NEW_COUNT",
-            "color": "blue",
-            "style": "flat-square",
-            "logo": "github"
-          }
-          EOF
-
-          echo "new_count=$NEW_COUNT" >> \$GITHUB_OUTPUT
-          echo "Counter updated from $CURRENT to $NEW_COUNT"
-        shell: bash
-
-      - name: Commit and push changes
+      - name: Update SVG
+        run: |
+          sed -i "s/Visits: [0-9]*/Visits: $((steps.count.outputs.current_count + 1))/" counter.svg
+          
+      - name: Commit changes
         uses: EndBug/add-and-commit@v9
         with:
-          add: 'counter.json'
-          message: 'Increment visitor counter to ${{ steps.counter.outputs.new_count }}'
-          push: true 
-          default_author: github_actions 
-          pathspec: 'counter.json'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-
-      - name: Verify update
-        run: |
-          if [ -f "counter.json" ]; then
-            FINAL_COUNT=$(jq -r '.message' counter.json)
-            echo "Final counter value: $FINAL_COUNT"
-          else
-            echo "ERROR: counter.json was not created!"
-            exit 1
-          fi
-        shell: bash
+          add: 'counter.svg counter-data.json'
+          message: 'Update visitor counter to ${{ steps.count.outputs.current_count + 1 }}'
