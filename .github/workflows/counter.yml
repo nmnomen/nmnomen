@@ -1,0 +1,41 @@
+name: Update Visitor Counter
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */12 * * *'
+
+jobs:
+  update-counter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update counter
+        id: counter
+        run: |
+          if [ -f "counter.json" ]; then
+            CURRENT=$(jq -r '.message' counter.json 2>/dev/null || echo "0")
+          else
+            CURRENT=0
+          fi
+          
+          NEW_COUNT=$((CURRENT + 1))
+
+          cat > counter.json << EOF
+          {
+            "schemaVersion": 1,
+            "label": "👁️ Visits",
+            "message": "$NEW_COUNT",
+            "color": "blue"
+          }
+          EOF
+          
+          echo "new_count=$NEW_COUNT" >> $GITHUB_OUTPUT
+
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: 'counter.json'
+          message: 'Increment visitor counter to ${{ steps.counter.outputs.new_count }}'
