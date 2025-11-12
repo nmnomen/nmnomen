@@ -27,7 +27,7 @@ jobs:
           NEW_COUNT=$((COUNT + 1))
           echo $NEW_COUNT > visitor-count.txt
           
-          cat << 'EOF' > counter.json
+          cat > counter.json << EOF
 {
   "schemaVersion": 1,
   "label": "👁️ Visits",
@@ -36,8 +36,6 @@ jobs:
   "style": "flat-square"
 }
 EOF
-          
-          sed -i "s/\"\\$NEW_COUNT\"/$NEW_COUNT/" counter.json
           
           echo "count=$NEW_COUNT" >> $GITHUB_OUTPUT
           echo "Updated counter to $NEW_COUNT"
