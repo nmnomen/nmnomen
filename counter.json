@@ -1,7 +1,1 @@
-{
-  "schemaVersion": 1,
-  "label": "👁️ Visits", 
-  "message": "0",
-  "color": "blue",
-  "style": "flat-square"
-}
+{"schemaVersion":1,"label":"👁️ Visits","message":"1","color":"blue","style":"flat-square"}
