@@ -12,4 +12,4 @@ My site: [https://milovision.art/](https://milovision.art/)<br><br>
 [![YouTube](img/youtube_contact.png)](https://www.youtube.com/channel/UCwmJOLFg7Iarb7tPza4wdvg)&ensp;
 [![IMDb](img/imdb_contact.png)](https://www.imdb.com/name/nm12834185/)
 
-![Visits](https://img.shields.io/endpoint?url=https://nmnomen/counter)
+![Visits](https://img.shields.io/endpoint?url=https://nmnomen.github.io/nmnomen/counter.json&style=flat-square&color=blue&logo=github)
