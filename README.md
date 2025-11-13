@@ -13,3 +13,4 @@ My site: [https://milovision.art/](https://milovision.art/)<br><br>
 [![IMDb](img/imdb_contact.png)](https://www.imdb.com/name/nm12834185/)
 
 ![Visitors](https://visitor-badge.laobi.icu/badge?page_id=nmnomen.nmnomen&style=flat-square&color=blue)
+[![Visits](https://img.shields.io/badge/dynamic/json?color=blue&label=👁️%20Visits&query=value&url=https://api.countapi.xyz/get/nmnomen/nmnomen/visits&cacheSeconds=0)](https://nmnomen.github.io/nmnomen)
